@@ -12,7 +12,7 @@ enum helloWorld: String, CaseIterable {
    case Hello_World, שלום_עולם, Hola_Mundo
 }
 
-struct ContentView: View {
+struct StartScreen1: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     
@@ -50,6 +50,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    StartScreen1()
         .modelContainer(for: Item.self, inMemory: true)
 }
