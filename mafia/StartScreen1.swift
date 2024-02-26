@@ -8,48 +8,41 @@
 import SwiftUI
 import SwiftData
 
-enum helloWorld: String, CaseIterable {
-   case Hello_World, שלום_עולם, Hola_Mundo
-}
-
 struct StartScreen1: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-    
-    @State var selection: helloWorld = .Hello_World
-
     var body: some View {
         NavigationView {
-            VStack{
-                Text(selection.rawValue)
-                    .font(.system(size: 125))
-                Picker("Select Laungauge", selection: $selection) {
-                    ForEach(helloWorld.allCases, id: \.self){
-                        helloWorld in Text(helloWorld.rawValue)
-                    }
+            ZStack{
+                VStack(spacing: 40) {
+                    Spacer()
+                    Text("Mafia").font(.system(size: 65)).bold().padding(.top)
+                    Image(.manWithHat)
                 }
-                .pickerStyle(.segmented)
+                VStack{
+                    NavigationLink(destination: CreateProfile()) {
+                        Text("Play").frame(width: 100, height: 50, alignment: .center).background(.gray).foregroundColor(.black).cornerRadius(50)
+                    }.frame(alignment: .centerLastTextBaseline)
+                }
+                
             }
-        }
+              }
+        .padding()
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
+}
+    
+struct StartScreen1_Previews: PreviewProvider {
+    static var previews: some View {
+        StartScreen1()
     }
 }
 
-#Preview {
-    StartScreen1()
-        .modelContainer(for: Item.self, inMemory: true)
+struct CreateProfile: View {
+    var body: some View {
+        VStack {
+                    Image(systemName: "globe")
+                        .imageScale(.large)
+                        .foregroundColor(.accentColor)
+                    Text("Hello, world!")
+                }
+                .padding()
+    }
 }

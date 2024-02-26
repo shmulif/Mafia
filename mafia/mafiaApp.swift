@@ -25,7 +25,7 @@ struct mafiaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StartScreen1()
         }
         .modelContainer(sharedModelContainer)
     }

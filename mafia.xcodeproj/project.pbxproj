@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		68B37B392B7306EA00C899CE /* mafiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B37B382B7306EA00C899CE /* mafiaApp.swift */; };
-		68B37B3B2B7306EA00C899CE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B37B3A2B7306EA00C899CE /* ContentView.swift */; };
+		68B37B3B2B7306EA00C899CE /* StartScreen1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B37B3A2B7306EA00C899CE /* StartScreen1.swift */; };
 		68B37B3D2B7306EA00C899CE /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B37B3C2B7306EA00C899CE /* Item.swift */; };
 		68B37B3F2B7306EB00C899CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B37B3E2B7306EB00C899CE /* Assets.xcassets */; };
 		68B37B432B7306EB00C899CE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B37B422B7306EB00C899CE /* Preview Assets.xcassets */; };
@@ -37,7 +37,7 @@
 /* Begin PBXFileReference section */
 		68B37B352B7306EA00C899CE /* mafia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mafia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B37B382B7306EA00C899CE /* mafiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mafiaApp.swift; sourceTree = "<group>"; };
-		68B37B3A2B7306EA00C899CE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		68B37B3A2B7306EA00C899CE /* StartScreen1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreen1.swift; sourceTree = "<group>"; };
 		68B37B3C2B7306EA00C899CE /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		68B37B3E2B7306EB00C899CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68B37B402B7306EB00C899CE /* mafia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mafia.entitlements; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				68B37B382B7306EA00C899CE /* mafiaApp.swift */,
-				68B37B3A2B7306EA00C899CE /* ContentView.swift */,
+				68B37B3A2B7306EA00C899CE /* StartScreen1.swift */,
 				68B37B3C2B7306EA00C899CE /* Item.swift */,
 				68B37B3E2B7306EB00C899CE /* Assets.xcassets */,
 				68B37B402B7306EB00C899CE /* mafia.entitlements */,
@@ -262,7 +262,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68B37B3B2B7306EA00C899CE /* ContentView.swift in Sources */,
+				68B37B3B2B7306EA00C899CE /* StartScreen1.swift in Sources */,
 				68B37B3D2B7306EA00C899CE /* Item.swift in Sources */,
 				68B37B392B7306EA00C899CE /* mafiaApp.swift in Sources */,
 			);
