@@ -19,3 +19,4 @@ Setup Instructions:
 
 Like all iOS development, it must be done on a Mac.
 1) Download xCode from the Mac app store.
+2) Other setup steps that I will add when I find them out.
