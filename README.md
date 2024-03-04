@@ -1,5 +1,6 @@
 Mafia game for iOS
 
+
 Description:
 
 The app is designed so that everyone can join from their own phone. The
@@ -12,6 +13,7 @@ abilities will be given the opportunity to use them. In the day there will be a 
 with all players, The mafia cannot communicate privately during the day. If
 someone was eliminated they cannot participate in the chat. The game will
 track who wins based on the rules of Mafia.
+
 
 Setup Instructions:
 
