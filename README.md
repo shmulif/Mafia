@@ -21,6 +21,7 @@ Like all iOS development, it must be done on a Mac.
 That's it, You're ready to start editing!
 
 **Incorporating Firebase:**
+
 You will need to set up a Firebase account and incorporate it into your project, This video provides a detailed guide https://www.youtube.com/watch?v=sHWX5j6wUjA
 Check out the rest of the channel for help with iOS development in general including more help with using Firebase in Swift.
 
