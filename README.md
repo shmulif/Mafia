@@ -35,5 +35,5 @@ That's it, You're ready to start editing!
 3) Add an overview of the rules
 4) Create variations of the game that fit in different genres or time-periods. For example, there can be a werewolf variation or a world war II spy variation.
 
-If you have a suggested addition I would love to hear it!
+If you have a suggested addition I would love to hear it.
 
