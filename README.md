@@ -23,3 +23,9 @@ Like all iOS development, it must be done on a Mac.
 5) Hit the "clone" button. 
 3) After you select a location to save it, the file will open.
 4) That's it, You're ready to start editing!
+
+Some Ideas for additions:
+1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian)
+2) Have specialty roles that players can choose to include. There are some great ideas in the Wikipedia article above, as well as at this link https://deusexmafia.fandom.com/wiki/Mafia_Roles
+3) Add an overview of the rules
+4) 
