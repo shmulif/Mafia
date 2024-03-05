@@ -16,6 +16,7 @@ track who wins based on the rules of Mafia.
 
 
 Setup Instructions:
+
 Like all iOS development, it must be done on a Mac.
 1) Open Xcode. (If you do not have it yet, Download it from the Mac app store.)
 2) Select "Clone Git Repository" from the options that come up.
