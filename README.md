@@ -1,5 +1,6 @@
 Mafia game for iOS
 
+Before working on this it is important to be familiar with the rules of Mafia. You can check out this Wikipedia page https://en.wikipedia.org/wiki/Mafia_(party_game)
 
 Description:
 The app is designed so that everyone can join from their own phone. The
@@ -16,5 +17,9 @@ track who wins based on the rules of Mafia.
 
 Setup Instructions:
 Like all iOS development, it must be done on a Mac.
-1) Download xCode from the Mac app store.
-2) Other setup steps that I will add when I find them out.
+1) Open Xcode. (If you do not have it yet, Download it from the Mac app store.)
+2) Select "Clone Git Repository" from the options that come up.
+4) Paste the URL for this repository into the search bar that appears at the top.
+5) Hit the "clone" button. 
+3) After you select a location to save it, the file will open.
+That's it, You're ready to put your touch on the project. Happy editing!
