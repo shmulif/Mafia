@@ -2,6 +2,7 @@
 
 Before working on this it is important to be familiar with the rules of Mafia. You can check out this Wikipedia page https://en.wikipedia.org/wiki/Mafia_(party_game)
 
+
 **Description:**
 The app is designed so that everyone can join from their own phone. The
 software assigns random roles to everyone (At the moment it is designed for six players). The app gives abilities or
@@ -15,6 +16,7 @@ someone was eliminated they cannot participate in the chat. The game will
 track who wins based on the rules of Mafia.
 
 
+
 **Setup Instructions:**
 
 Like all iOS development, it must be done on a Mac.
@@ -25,6 +27,7 @@ Like all iOS development, it must be done on a Mac.
 3) After you select a location to save it, the file will open.
 
 That's it, You're ready to start editing!
+
 
 **Some Ideas for additions:**
 1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian)
