@@ -9,7 +9,6 @@ The app is designed so that everyone can join from their own phone. The software
 identity. The game will run through night and day cycles. During the night the mafia will communicate with a private chat between them and everyone with abilities will be given the opportunity to use them. In the day there will be a chat with all players, The mafia cannot communicate privately during the day. If someone was eliminated they cannot participate in the chat. The game tracks who wins based on the rules of Mafia.
 
 
-
 **Setup Instructions:**
 
 Like all iOS development, it must be done on a Mac.
@@ -21,6 +20,8 @@ Like all iOS development, it must be done on a Mac.
 
 That's it, You're ready to start editing!
 
+**Incorporating firebase:**
+1) I will list the steps here as soon as I am more familiar with them.
 
 **Some Ideas for additions:**
 1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian).
