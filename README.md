@@ -12,8 +12,7 @@ identity. The game will run through night and day cycles. During the night the
 mafia will communicate with a private chat between them and everyone with
 abilities will be given the opportunity to use them. In the day there will be a chat
 with all players, The mafia cannot communicate privately during the day. If
-someone was eliminated they cannot participate in the chat. The game will
-track who wins based on the rules of Mafia.
+someone was eliminated they cannot participate in the chat. The game tracks who wins based on the rules of Mafia.
 
 
 
