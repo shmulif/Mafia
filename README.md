@@ -22,4 +22,4 @@ Like all iOS development, it must be done on a Mac.
 4) Paste the URL for this repository into the search bar that appears at the top.
 5) Hit the "clone" button. 
 3) After you select a location to save it, the file will open.
-That's it, You're ready to put your touch on the project. Happy editing!
+4) That's it, You're ready to put your touch on the project. Happy editing!
