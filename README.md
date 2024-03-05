@@ -20,10 +20,10 @@ Like all iOS development, it must be done on a Mac.
 
 That's it, You're ready to start editing!
 
-**Incorporating firebase:**
+**Incorporating Firebase:**
 1) I will list the steps here when I am more familiar with them.
 
-**Some Ideas for additions:**
+**Some Ideas for Additions:**
 1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian).
 2) Have specialty roles that players can choose to include. There are some great ideas in the Wikipedia article above, as well as at this link https://deusexmafia.fandom.com/wiki/Mafia_Roles
 3) Add an overview of the rules.
