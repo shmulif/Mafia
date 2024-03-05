@@ -21,7 +21,7 @@ Like all iOS development, it must be done on a Mac.
 That's it, You're ready to start editing!
 
 **Incorporating firebase:**
-1) I will list the steps here as soon as I am more familiar with them.
+1) I will list the steps here when I am more familiar with them.
 
 **Some Ideas for additions:**
 1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian).
