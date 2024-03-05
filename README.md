@@ -1,6 +1,6 @@
 **Mafia game for iOS**
 
-Before working on this it is important to be familiar with the rules of Mafia. You can check out this Wikipedia page https://en.wikipedia.org/wiki/Mafia_(party_game)
+Before working on this it is important to be familiar with the rules of Mafia. You can check out this Wikipedia article https://en.wikipedia.org/wiki/Mafia_(party_game)
 
 
 **Description:**
