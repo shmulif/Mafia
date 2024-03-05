@@ -1,8 +1,8 @@
-Mafia game for iOS
+**Mafia game for iOS**
 
 Before working on this it is important to be familiar with the rules of Mafia. You can check out this Wikipedia page https://en.wikipedia.org/wiki/Mafia_(party_game)
 
-Description:
+**Description:**
 The app is designed so that everyone can join from their own phone. The
 software assigns random roles to everyone (At the moment it is designed for six players). The app gives abilities or
 information to the players depending on their role. For example, the mafias
@@ -15,7 +15,7 @@ someone was eliminated they cannot participate in the chat. The game will
 track who wins based on the rules of Mafia.
 
 
-Setup Instructions:
+**Setup Instructions:**
 
 Like all iOS development, it must be done on a Mac.
 1) Open Xcode. (If you do not have it yet, Download it from the Mac app store.)
@@ -26,7 +26,7 @@ Like all iOS development, it must be done on a Mac.
 
 That's it, You're ready to start editing!
 
-Some Ideas for additions:
+**Some Ideas for additions:**
 1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian)
 2) Have specialty roles that players can choose to include. There are some great ideas in the Wikipedia article above, as well as at this link https://deusexmafia.fandom.com/wiki/Mafia_Roles
 3) Add an overview of the rules
