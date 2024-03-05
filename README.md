@@ -23,9 +23,9 @@ That's it, You're ready to start editing!
 
 
 **Some Ideas for additions:**
-1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian)
+1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian).
 2) Have specialty roles that players can choose to include. There are some great ideas in the Wikipedia article above, as well as at this link https://deusexmafia.fandom.com/wiki/Mafia_Roles
-3) Add an overview of the rules
+3) Add an overview of the rules.
 4) Create variations of the game that fit in different genres or time-periods. For example, there can be a werewolf variation or a world war II spy variation.
 
 If you have a suggested addition I would love to hear it.
