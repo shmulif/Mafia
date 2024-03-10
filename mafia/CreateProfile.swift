@@ -32,6 +32,7 @@ final class NameViewModel: ObservableObject {
         Task {
             do {
                 let returnedUserData = try await AuthenticationManeger.shared.signInAnonymus()
+                try await UserManager.shared.createNewUser(auth: returnedUserData, name: name)
                 print("Sucess")
                 print(returnedUserData)
             } catch {

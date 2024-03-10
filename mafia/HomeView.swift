@@ -9,8 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @State var showNewScreen: Bool = false
-    
     var body: some View {
         NavigationView{
             VStack{
@@ -20,7 +18,7 @@ struct HomeView: View {
                     .frame(height: 150)
                     .padding(20)
                 Spacer()
-                NavigationLink("Start Game", destination: NewGameView())
+                NavigationLink("Host Game", destination: NewGameView())
                     .font(.headline)
                     .foregroundColor(.black)
                     .frame(height: 55)
