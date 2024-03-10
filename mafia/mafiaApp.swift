@@ -7,9 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import Firebase
 
 @main
 struct mafiaApp: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -25,8 +29,17 @@ struct mafiaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            StartScreen1()
+            FirstTimeView()
         }
         .modelContainer(sharedModelContainer)
+    }
+    
+    
+    class AppDelegate: NSObject, UIApplicationDelegate {
+      func application(_ application: UIApplication,
+                       didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        FirebaseApp.configure()
+        return true
+      }
     }
 }

@@ -8,7 +8,10 @@
 import SwiftUI
 import SwiftData
 
-struct StartScreen1: View {
+struct FirstTimeView: View {
+    
+    @State var showNewScreen: Bool = false
+    
     var body: some View {
         NavigationView {
             ZStack{
@@ -18,9 +21,14 @@ struct StartScreen1: View {
                     Image(.manWithHat)
                 }
                 VStack{
-                    NavigationLink(destination: CreateProfile()) {
+                    Button(action: {
+                        showNewScreen.toggle()
+                    }, label: {
                         Text("Play").frame(width: 100, height: 50, alignment: .center).background(.gray).foregroundColor(.black).cornerRadius(50)
-                    }.frame(alignment: .centerLastTextBaseline)
+                    })
+                    .sheet(isPresented: $showNewScreen, content:{
+                        CreateProfile()
+                    }).frame(alignment: .centerLastTextBaseline)
                 }
                 
             }
@@ -29,20 +37,8 @@ struct StartScreen1: View {
     }
 }
     
-struct StartScreen1_Previews: PreviewProvider {
+struct FirstTimeView_Previews: PreviewProvider {
     static var previews: some View {
-        StartScreen1()
-    }
-}
-
-struct CreateProfile: View {
-    var body: some View {
-        VStack {
-                    Image(systemName: "globe")
-                        .imageScale(.large)
-                        .foregroundColor(.accentColor)
-                    Text("Hello, world!")
-                }
-                .padding()
+        FirstTimeView()
     }
 }
