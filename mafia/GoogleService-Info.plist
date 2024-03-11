@@ -1,3 +1,3 @@
 //When you configure Firebase, you will be prompted to download a file with the same name as this one (GoogleService-Info.plist)
-//replace this file with yours in order to connect to your Firebase account
+//Replace this file with yours in order to connect to your Firebase account
 //Make sure to enable anonymous authentication and Firestore on your console
