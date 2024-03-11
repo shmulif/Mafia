@@ -41,6 +41,14 @@ final class NameViewModel: ObservableObject {
             
         }
     }
+    
+    func getAuthenticatedUser() throws -> AuthDataResultModel {
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badServerResponse)
+        }
+        
+        return AuthDataResultModel(user: user)
+    }
 }
 
 struct CreateProfile: View {
@@ -49,6 +57,7 @@ struct CreateProfile: View {
     @StateObject private var viewModel = NameViewModel()
     @Environment(\.presentationMode)  var presentationMode
     @State var showHomeView: Bool = false
+    @State var userId: String = ""
     
     var body: some View {
         ZStack{
@@ -81,6 +90,8 @@ struct CreateProfile: View {
                     Task{
                         do {
                             try await viewModel.signInAnonymous()
+                            let newUser = try viewModel.getAuthenticatedUser()
+                            userId = newUser.uid
                             showHomeView.toggle()
                         } catch {
                             print(error)
@@ -96,14 +107,13 @@ struct CreateProfile: View {
                         .cornerRadius(10)
                 })
                 .fullScreenCover(isPresented: $showHomeView, content:{
-                    HomeView()
+                    HomeView(userId: $userId)
                 })
                 Spacer()
                 .padding()
             }
             .padding()
         }
-        .analyticsScreen(name: "\(CreateProfile.self)")
     }
 }
 

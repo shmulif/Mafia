@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @Binding var userId: String
+    
     var body: some View {
         NavigationView{
             VStack{
@@ -18,7 +20,7 @@ struct HomeView: View {
                     .frame(height: 150)
                     .padding(20)
                 Spacer()
-                NavigationLink("Host Game", destination: NewGameView())
+                NavigationLink("Host Game", destination: CreateGameView())
                     .font(.headline)
                     .foregroundColor(.black)
                     .frame(height: 55)
@@ -26,7 +28,7 @@ struct HomeView: View {
                     .background(Color.gray)
                     .cornerRadius(10)
                     .padding()
-                NavigationLink("Join Game", destination: NewGameView())
+                NavigationLink("Join Game", destination: JoinGameView())
                     .font(.headline)
                     .foregroundColor(.black)
                     .frame(height: 55)
@@ -43,5 +45,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(userId: .constant(""))
 }

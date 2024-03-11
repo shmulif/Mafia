@@ -1,16 +1,15 @@
 //
-//  JoinGameView.swift
+//  CreateGameView.swift
 //  mafia
 //
-//  Created by Shmuli Feld on 3/9/24.
+//  Created by Shmuli Feld on 3/10/24.
 //
 
 import SwiftUI
+import FirebaseFirestore
 import FirebaseAuth
 
-final class GameIdModel: ObservableObject {
-    
-    @Published var gameId = ""
+final class FindUserViewModel: ObservableObject {
     
     func getAuthenticatedUser() throws -> AuthDataResultModel {
         guard let user = Auth.auth().currentUser else {
@@ -19,33 +18,33 @@ final class GameIdModel: ObservableObject {
         
         return AuthDataResultModel(user: user)
     }
-
 }
 
-struct JoinGameView: View {
+struct CreateGameView: View {
     
-    @StateObject private var viewModel = GameIdModel()
+    @StateObject private var viewModel = FindUserViewModel()
     @State var showNextView: Bool = false
     
     var body: some View {
-
-        VStack(){
-            Text("Join Game")
+        VStack {
+            Text("Game ID:")
                 .font(.largeTitle)
                 .bold()
-                .frame(height: 100)
+                .frame(height: 150)
+            Text("1111")
+                .font(.largeTitle)
+                .bold()
+                .frame(height: 150)
                 .padding(20)
-            TextField("Enter game ID..", text: $viewModel.gameId )
-                .padding()
-                .background(Color.gray.opacity(0.4))
-                .cornerRadius(10)
             Button(action: {
-                Task {
+                Task{
                     do {
+                        //create game
+                        try await GameManager.shared.createNewGame(gameId: "1111")
                         //add current user to game
                         let currentUser = try viewModel.getAuthenticatedUser()
+                        try await UserManager.shared.linkUserToGame(auth: currentUser, gameId: "1111")
                         let userId = currentUser.uid
-                        try await UserManager.shared.linkUserToGame(auth: currentUser, gameId: viewModel.gameId)
                         let player = try await UserManager.shared.getUser(userId: userId)
                         try await GameManager.shared.addPlayer(user: player)
                         showNextView.toggle()
@@ -54,24 +53,22 @@ struct JoinGameView: View {
                     }
                 }
             }, label: {
-                Text("Join")
+                Text("Start Game")
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .frame(height: 55)
-                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
-                    .background(Color.blue)
+                    .frame(width: 150 )
+                    .background(Color.gray)
                     .cornerRadius(10)
             })
             .fullScreenCover(isPresented: $showNextView, content:{
-                WaitingForPlayersView(gameId: viewModel.gameId)
+                WaitingForPlayersView(gameId: "1111")
             })
-            Spacer()
-            .padding()
+        
         }
-        .padding()
     }
 }
 
 #Preview {
-    JoinGameView()
+    CreateGameView()
 }

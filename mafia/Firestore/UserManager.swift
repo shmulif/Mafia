@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseFirestoreInternalWrapper
 
 struct DBUser {
     let userId: String
@@ -29,6 +30,13 @@ final class UserManager {
             "current_game" : "",
         ]
         try await Firestore.firestore().collection("users").document(auth.uid).setData(userData, merge: false)
+    }
+    
+    func linkUserToGame(auth: AuthDataResultModel, gameId: String) async throws {
+        var userData: [String:Any] = [
+            "current_game" : gameId,
+        ]
+        try await Firestore.firestore().collection("users").document(auth.uid).setData(userData, merge: true)
     }
     
     func getUser(userId: String) async throws -> DBUser {

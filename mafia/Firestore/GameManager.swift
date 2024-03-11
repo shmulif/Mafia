@@ -8,17 +8,17 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseFirestoreInternalWrapper
 
 struct Game {
     let gameId: String
-    var day: Bool
+    var isDay: Bool
     let dateCreated: Date?
-    var playerCount: Int?
 }
 
-struct Player {
+struct Player: Hashable {
     let userId: String
-    var alive: Bool
+    var isAlive: Bool
     let name: String
     let dateCreated: Date?
     let currentGame: String?
@@ -32,9 +32,8 @@ final class GameManager {
     func createNewGame(gameId: String) async throws {
         let userData: [String:Any] = [ //might need to be var
             "game_id" : gameId,
-            "day" : false,
+            "is_day" : false,
             "date_created" : Timestamp(),
-            "player_count" : 0,
         ]
         try await Firestore.firestore().collection("games").document(gameId).setData(userData, merge: false)
     }
@@ -46,11 +45,10 @@ final class GameManager {
             throw URLError(.badServerResponse)
         }
         
-        let day = data["day"] as? Bool
+        let isDay = data["is_day"] as? Bool
         let dateCreated = data["date_created"] as? Date
-        let playerCount = data["player_count"] as? Int
         
-        return Game(gameId: gameId, day: day!, dateCreated: dateCreated, playerCount: playerCount)
+        return Game(gameId: gameId, isDay: isDay!, dateCreated: dateCreated)
     }
     
     func getAllPlayers(gameId: String) async throws -> [Player] {
@@ -61,13 +59,13 @@ final class GameManager {
             
             let data = document.data()
             
-            let name = data["name"] as? String
-            let alive = data["alive"] as? Bool
-            let dateCreated = data["date_created"] as? Date
-            let currentGame = data["current_game"] as? String
-            let userId = data["user_id"] as? String
+            let name = data["name"] as? String ?? "<not found>"
+            let isAlive = data["is_alive"] as? Bool ?? true
+            let dateCreated = data["date_created"] as? Date ?? Date(timeIntervalSinceNow: 0)
+            let currentGame = data["current_game"] as? String ?? "<not found>"
+            let userId = data["user_id"] as? String ?? "<not found>"
             
-            players.append(Player(userId: userId!, alive: alive!, name: name!, dateCreated: dateCreated, currentGame: currentGame))
+            players.append(Player(userId: userId, isAlive: isAlive, name: name, dateCreated: dateCreated, currentGame: currentGame))
         }
         
         return players
@@ -77,7 +75,7 @@ final class GameManager {
         
         let playerData: [String:Any] = [
             "user_id" : user.userId,
-            "alive" : true,
+            "is_alive" : true,
             "name" : user.name,
             "date_created" : Timestamp(),
         ]
