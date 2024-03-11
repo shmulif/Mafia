@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+
+//set up a system that checks if user is authenticated, if not it prompts them to create profile, otherwise it goes straight to home screen
 
 struct RootView: View {
     var body: some View {

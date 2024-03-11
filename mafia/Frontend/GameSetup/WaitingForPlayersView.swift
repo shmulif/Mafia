@@ -12,12 +12,6 @@ struct WaitingForPlayersView: View {
     @State var gameId: String
     @State var players: [Player] = []
     
-//    List {
-//        ForEach(players, id: \.self) { player<#_#> in
-//            PlayerListRowView(title: player.name)
-//        }
-//    }
-    
     
     var body: some View {
         VStack{
@@ -29,7 +23,7 @@ struct WaitingForPlayersView: View {
                 Button {
                     Task{
                         do {
-                            players = try await GameManager.shared.getAllPlayers(gameId: gameId)
+                            players = try await GameDatabaseManager.shared.getAllPlayers(gameId: gameId)
                         } catch {
                             print(error)
                         }

@@ -8,7 +8,6 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import FirebaseFirestoreInternalWrapper
 
 struct DBUser {
     let userId: String
@@ -17,13 +16,13 @@ struct DBUser {
     var currentGame: String?
 }
 
-final class UserManager {
+final class UserDatabaseManager {
     
-    static let shared = UserManager()
+    static let shared = UserDatabaseManager()
     private init() { }
     
     func createNewUser(auth: AuthDataResultModel, name: String) async throws {
-        var userData: [String:Any] = [
+        let userData: [String:Any] = [ //turorial used var
             "user_id" : auth.uid,
             "name" : name,
             "date_created" : Timestamp(),
@@ -33,10 +32,17 @@ final class UserManager {
     }
     
     func linkUserToGame(auth: AuthDataResultModel, gameId: String) async throws {
-        var userData: [String:Any] = [
+        let userData: [String:Any] = [
             "current_game" : gameId,
         ]
         try await Firestore.firestore().collection("users").document(auth.uid).setData(userData, merge: true)
+    }
+    
+    func unlinkUserFromGame(auth: AuthDataResultModel) async throws {
+        let userData: [String:Any] = [
+            "current_game" : "",
+        ]
+        try await Firestore.firestore().collection("users").document(auth.uid).updateData(userData)
     }
     
     func getUser(userId: String) async throws -> DBUser {

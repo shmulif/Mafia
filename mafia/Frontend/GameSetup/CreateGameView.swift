@@ -7,22 +7,10 @@
 
 import SwiftUI
 import FirebaseFirestore
-import FirebaseAuth
 
-final class FindUserViewModel: ObservableObject {
-    
-    func getAuthenticatedUser() throws -> AuthDataResultModel {
-        guard let user = Auth.auth().currentUser else {
-            throw URLError(.badServerResponse)
-        }
-        
-        return AuthDataResultModel(user: user)
-    }
-}
 
 struct CreateGameView: View {
     
-    @StateObject private var viewModel = FindUserViewModel()
     @State var showNextView: Bool = false
     
     var body: some View {
@@ -40,13 +28,14 @@ struct CreateGameView: View {
                 Task{
                     do {
                         //create game
-                        try await GameManager.shared.createNewGame(gameId: "1111")
-                        //add current user to game
-                        let currentUser = try viewModel.getAuthenticatedUser()
-                        try await UserManager.shared.linkUserToGame(auth: currentUser, gameId: "1111")
+                        try await GameDatabaseManager.shared.createNewGame(gameId: "1111")
+                        //get current userId
+                        let currentUser = try AuthenticationManager.shared.getAuthenticatedUser()
                         let userId = currentUser.uid
-                        let player = try await UserManager.shared.getUser(userId: userId)
-                        try await GameManager.shared.addPlayer(user: player)
+                        //add user to game
+                        try await UserDatabaseManager.shared.linkUserToGame(auth: currentUser, gameId: "1111")
+                        let player = try await UserDatabaseManager.shared.getUser(userId: userId)
+                        try await GameDatabaseManager.shared.addPlayer(user: player)
                         showNextView.toggle()
                     } catch {
                         print(error)

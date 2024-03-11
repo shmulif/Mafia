@@ -45,9 +45,9 @@ struct JoinGameView: View {
                         //add current user to game
                         let currentUser = try viewModel.getAuthenticatedUser()
                         let userId = currentUser.uid
-                        try await UserManager.shared.linkUserToGame(auth: currentUser, gameId: viewModel.gameId)
-                        let player = try await UserManager.shared.getUser(userId: userId)
-                        try await GameManager.shared.addPlayer(user: player)
+                        try await UserDatabaseManager.shared.linkUserToGame(auth: currentUser, gameId: viewModel.gameId)
+                        let player = try await UserDatabaseManager.shared.getUser(userId: userId)
+                        try await GameDatabaseManager.shared.addPlayer(user: player)
                         showNextView.toggle()
                     } catch {
                         print(error)

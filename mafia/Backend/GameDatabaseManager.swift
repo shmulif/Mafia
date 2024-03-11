@@ -8,7 +8,6 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import FirebaseFirestoreInternalWrapper
 
 struct Game {
     let gameId: String
@@ -24,9 +23,9 @@ struct Player: Hashable {
     let currentGame: String?
 }
 
-final class GameManager {
+final class GameDatabaseManager {
     
-    static let shared = GameManager()
+    static let shared = GameDatabaseManager()
     private init() { }
     
     func createNewGame(gameId: String) async throws {
