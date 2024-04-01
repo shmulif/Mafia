@@ -110,7 +110,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		683460CA2B9F474E0047BA63 /* Backend */ = {
+		683460CA2B9F474E0047BA63 /* Behind the Scenes */ = {
 			isa = PBXGroup;
 			children = (
 				683460CD2B9F52CF0047BA63 /* AuthenticationManager.swift */,
@@ -119,17 +119,17 @@
 				683460D22B9F57370047BA63 /* GameIdManager.swift */,
 				68B37B3C2B7306EA00C899CE /* Item.swift */,
 			);
-			path = Backend;
+			path = "Behind the Scenes";
 			sourceTree = "<group>";
 		};
-		683460CB2B9F47770047BA63 /* Frontend */ = {
+		683460CB2B9F47770047BA63 /* Visable */ = {
 			isa = PBXGroup;
 			children = (
 				68D892482B9F5E8D001DF4FE /* OpeningScreens */,
 				683460CC2B9F47C50047BA63 /* GameSetup */,
 				683460CF2B9F53310047BA63 /* InGame */,
 			);
-			path = Frontend;
+			path = Visable;
 			sourceTree = "<group>";
 		};
 		683460CC2B9F47C50047BA63 /* GameSetup */ = {
@@ -175,8 +175,8 @@
 			isa = PBXGroup;
 			children = (
 				68B37B382B7306EA00C899CE /* mafiaApp.swift */,
-				683460CB2B9F47770047BA63 /* Frontend */,
-				683460CA2B9F474E0047BA63 /* Backend */,
+				683460CB2B9F47770047BA63 /* Visable */,
+				683460CA2B9F474E0047BA63 /* Behind the Scenes */,
 				68FB48AE2B9B594D00974225 /* GoogleService-Info.plist */,
 				68B37B3E2B7306EB00C899CE /* Assets.xcassets */,
 				68B37B402B7306EB00C899CE /* mafia.entitlements */,

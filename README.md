@@ -13,20 +13,28 @@ identity. The game will run through night and day cycles. During the night the m
 
 Like all iOS development, it must be done on a Mac.
 1) Open Xcode (If you don't have it yet, download it from the Mac app store).
-2) Select "Clone Git Repository" from the options that come up.
+2) Select "Clone Git Repository".
 4) Paste the URL for this repository into the search bar that appears at the top.
-5) Hit the "clone" button. 
-3) After you select a location to save it, the file will open.
+5) Hit "clone".
+3) Select a location to save it.
+The files are now on your computer, however, for the app to run you must incorporate Firebase. Instructions are provided in the next section.
 
-That's it, You're ready to start editing!
 
 **Incorporating Firebase:**
 
-You will need to set up a Firebase account and incorporate it into your project, This video provides a detailed guide https://www.youtube.com/watch?v=sHWX5j6wUjA
-Check out the rest of the channel for help with iOS development in general including more help with using Firebase in Swift.
+You will need to set up a Firebase account and incorporate it into your project, This video provides a detailed guide https://www.youtube.com/watch?v=sHWX5j6wUjA You can skip the last step in the video of adding the configuration code (at 16:50) because the code is already added to the project.
+(Check out the rest of that channel for help with iOS development in general including more help with using Firebase in Swift.)
+
+Once your Firebase account is set up you must enable Firestore database. Select it from the left panel of your Firbase console, and click 'Create database'. The next section details how to mange security for Firestore. 
+
+**Firestore Security:**
+
+If your contributions to this project will be open source, it is best not to share the file called "GoogleService-Info.plist" (this file was downloaded during the setup of Firebase). This is the easiest way to ensure that no unwanted users can access your database. In order to exclude the file from your git repo, navigate to the project folder and run the command "git -ignore GoogleService-Info.plist".
+
+If you plan on publishing the app then the information in that file will be publicly available, so you will need to set up more advanced security measures. This video is a good guide for setting up security rules https://www.youtube.com/watch?v=ysvmtLCYou0 Documentation on Firetore security rules can be found here https://firebase.google.com/docs/rules  Additionally, it is recommended to set up a Firebase service called "App check". This is a paid service that ensures that your database can only be accessed from users of your app. Its documentation can be found here https://firebase.google.com/docs/app-check
 
 **Some Ideas for Additions:**
-1) Have the app work for a custom amount of players (Suggested minimum is four, one Mafifa, one Detective, one Doctor, one Civilian).
+1) Have the app work for a custom amount of players (Minimum should be four, one Mafifa, one Detective, one Doctor, one Civilian).
 2) Have specialty roles that players can choose to include. There are some great ideas in the Wikipedia article above, as well as at this link https://deusexmafia.fandom.com/wiki/Mafia_Roles
 3) Add an overview of the rules.
 4) Create variations of the game that fit in different genres or time-periods. For example, there can be a werewolf variation or a world war II spy variation.
