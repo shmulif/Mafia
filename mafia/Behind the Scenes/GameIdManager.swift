@@ -44,6 +44,7 @@ final class GameIdManager {
             try await Firestore.firestore().collection("game_ids").document(gameId[0]).setData(userData, merge: true)
         }
     
+
         
         return gameId[0]
     }

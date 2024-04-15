@@ -15,6 +15,17 @@ final class LocalGamePlayManager {
     
     //MARK: Moderator Functions
     
+    func killIfNeeded(gameId: String) async throws {
+        let shot = try await GameDatabaseManager.shared.getShot(gameId: gameId)
+        let saved = try await GameDatabaseManager.shared.getSaved(gameId: gameId)
+        if shot == saved {
+            try await GameDatabaseManager.shared.setRecentlyKilledToNoOne(gameId: gameId)
+        } else {
+            try await GameDatabaseManager.shared.kill(gameId: gameId, userId: shot)
+        }
+        
+    }
+    
     func assignRoles(players: [Player]) -> [Player]{
         
     var updatedPlayers: [Player] = players
@@ -35,8 +46,5 @@ final class LocalGamePlayManager {
     
     //MARK: Mafia Functions
     
-//Make sure that when a mafia is killed his done_nominating is set to false
-
-//    function to check if mafia are done should incorparate:
-//    let allMafiaAreDone = livingMafia.count == finnishedMafia.count
+    
 }

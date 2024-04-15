@@ -256,6 +256,27 @@ final class GameDatabaseManager {
         return host ?? "<no host found>"
     }
     
+    
+    func getShot(gameId: String) async throws -> String {
+        let snapshot = try await Firestore.firestore().collection("games").document(gameId).getDocument()
+        
+        let data = snapshot.data()
+        
+        let shot = data?["shot"] as? String
+        
+        return shot ?? "<no shot found>"
+    }
+    
+    func getSaved(gameId: String) async throws -> String {
+        let snapshot = try await Firestore.firestore().collection("games").document(gameId).getDocument()
+        
+        let data = snapshot.data()
+        
+        let saved = data?["saved"] as? String
+        
+        return saved ?? "<no saved found>"
+    }
+    
     func updateAllPlayerRoles(gameId: String, players: [Player]) async throws {
         
         for player in players {
@@ -323,19 +344,26 @@ final class GameDatabaseManager {
         try await Firestore.firestore().collection("games").document(gameId).updateData(data)
     }
     
-    func kill(gameId: String, player: Player) async throws {
+    func kill(gameId: String, userId: String) async throws {
         let data1: [String:Any] = [
-            "recently_killed" : player.user_id
+            "recently_killed" : userId
         ]
         let data2: [String:Any] = [
             "is_alive" : false
         ]
+        let data3: [String:Any] = [
+            "is_alive" : false,
+            //not entirely neccacery to reset because data is not taken from dead mafia but may prevent mistakes
+            "nominated_to_kill" : "",
+            "done_nominating" : false,
+        ]
         
         try await Firestore.firestore().collection("games").document(gameId).updateData(data1)
-        try await Firestore.firestore().collection("games").document(gameId).collection("players").document(player.user_id).updateData(data2)
+        try await Firestore.firestore().collection("games").document(gameId).collection("players").document(userId).updateData(data2)
         
-        if player.role == "mafia" {
-            try await Firestore.firestore().collection("games").document(gameId).collection("mafia_members").document(player.user_id).updateData(data2)
+        let role = try await getRole(gameId: gameId, userId: userId)
+        if role == "mafia" {
+            try await Firestore.firestore().collection("games").document(gameId).collection("mafia_members").document(userId).updateData(data3)
         }
     }
     
@@ -347,7 +375,38 @@ final class GameDatabaseManager {
         ]
         try await Firestore.firestore().collection("games").document(gameId).updateData(data)
     }
+    //rest vote count should be called at beginning and end of day, reset "voted_for" can be called once every 24 hours but doesnt hurt to call extra
     
+    //resets only "vote_count"
+    func resetAllPlayerVoteCount(gameId: String, players: [Player]) async throws {
+        
+        for player in players {
+            
+            let data: [String: Any] = [
+                "vote_count" : 0,
+            ]
+            
+            try await Firestore.firestore().collection("games").document(gameId)
+                .collection("players").document(player.user_id).updateData(data)
+        }
+        
+    }
+    //resets both "vote_count" and "voted_for"
+    func resetAllPlayerVotes(gameId: String, players: [Player]) async throws {
+        
+        for player in players {
+            
+            let data: [String: Any] = [
+                "vote_count" : 0,
+                "voted_for" : ""
+            ]
+            
+            try await Firestore.firestore().collection("games").document(gameId)
+                .collection("players").document(player.user_id).updateData(data)
+        }
+        
+    }
+
     //call at end of day
     func resetFields(gameId: String) async throws {
         //not sure if we should reset "recently_killed"
@@ -362,7 +421,6 @@ final class GameDatabaseManager {
         
     }
     
-    //probably not neccecary
     func setRecentlyKilledToNoOne(gameId: String) async throws {
         let data: [String:Any] = [
             "recently_killed" : "No one"
@@ -382,6 +440,19 @@ final class GameDatabaseManager {
     //MARK: Mafia Functions
     
     //Mafia general functions
+    func mafiaVoteAgainst(gameId: String, voterId: String, victimId: String) async throws {
+        let data1: [String:Any] = [
+            "nominated_to_kill" : victimId,
+            "done_nominating" : true,
+        ]
+        let data2: [String:Any] = [
+            "vote_count" : FieldValue.increment(Int64(1))
+        ]
+        
+        try await Firestore.firestore().collection("games").document(gameId).collection("mafia_members").document(voterId).updateData(data1)
+        try await Firestore.firestore().collection("games").document(gameId).collection("players").document(victimId).updateData(data2)
+    }
+    
     func getAllMafiaMembers(gameId: String) async throws -> [MafiaMember] {
         let snapshot = try await Firestore.firestore().collection("games").document(gameId).collection("mafia_members").getDocuments()
         
@@ -402,8 +473,31 @@ final class GameDatabaseManager {
         
         return mafiaMembers
     }
-    
-    
+    func resetAllMafiaVotes(gameId: String, players: [Player], mafiaMembers: [MafiaMember]) async throws {
+        
+        for player in players {
+            
+            let data: [String: Any] = [
+                "vote_count" : 0,
+            ]
+            
+            try await Firestore.firestore().collection("games").document(gameId)
+                .collection("players").document(player.user_id).updateData(data)
+        }
+        
+        for member in mafiaMembers {
+            
+            let data: [String: Any] = [
+                "nominated_to_kill" : "",
+                "done_nominating" : false,
+            ]
+            
+            try await Firestore.firestore().collection("games").document(gameId)
+                .collection("mafia_members").document(member.user_id).updateData(data)
+        }
+        
+    }
+    //not using this one
     func nominateToKill(gameId: String, mafiaUserId: String, victimUserId: String) async throws {
         let data: [String:Any] = [
             "nominated_to_kill" : victimUserId,
@@ -437,9 +531,17 @@ final class GameDatabaseManager {
     
     private var MafiDoneNominatingListener: ListenerRegistration? = nil
     
+    private var LivingMafiaCountListener: ListenerRegistration? = nil
+    
+    private var MafiDoneNominatingCountListener: ListenerRegistration? = nil
+    
     private var LML: ListenerRegistration? = nil
     private var MDL: ListenerRegistration? = nil
     
+    func removeBothCountListeners(){
+        self.MafiDoneNominatingListener?.remove()
+        self.LivingMafiaCountListener?.remove()
+    }
     
     func removeListenerForMafiaChat(){
         self.mafiaChatListener?.remove()
@@ -483,6 +585,59 @@ final class GameDatabaseManager {
         }
     }
     
+    func addListenerForLivingMafiaCount(gameId: String, completion: @escaping (_ livingMafiaCount: Int) -> Void) {
+        
+        
+        self.LivingMafiaCountListener =  Firestore.firestore().collection("games").document(gameId).collection("mafia_members").whereField("is_alive", isEqualTo: true).addSnapshotListener { querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                print("No document")
+                return
+            }
+            
+            //lengthy version
+            //                        let livingMafia: [Mafia] = documents.compactMap { documentSnaphot in
+            //                            return try? documentSnaphot.data(as: Mafia.self)
+            //                        }
+            
+            
+            
+            let mafiaMembers: [MafiaMember] = documents.compactMap({ try? $0.data(as: MafiaMember.self) })
+            let mafiaCount = mafiaMembers.count
+            
+            
+            completion(mafiaCount)
+            
+        }
+        
+        
+    }
+    
+    
+    func addListenerForDoneNominatingMafiaCount(gameId: String, completion: @escaping (_ livingMafiaCount: Int) -> Void) {
+        
+        
+        self.MafiDoneNominatingCountListener =  Firestore.firestore().collection("games").document(gameId).collection("mafia_members").whereField("done_nominating", isEqualTo: true).whereField("is_alive", isEqualTo: true).addSnapshotListener { querySnapshot, error in
+            guard let documents = querySnapshot?.documents else {
+                print("No document")
+                return
+            }
+            
+            //lengthy version
+            //                        let livingMafia: [Mafia] = documents.compactMap { documentSnaphot in
+            //                            return try? documentSnaphot.data(as: Mafia.self)
+            //                        }
+            
+            
+            
+            let mafiaMembers: [MafiaMember] = documents.compactMap({ try? $0.data(as: MafiaMember.self) })
+            let mafiaCount = mafiaMembers.count
+            
+            
+            completion(mafiaCount)
+            
+        }
+        
+    }
     
     func addListenerForLivingMafiaMembers(gameId: String, completion: @escaping (_ mafiaMembers: [MafiaMember]) -> Void) {
         
@@ -514,7 +669,7 @@ final class GameDatabaseManager {
     func addListenerForDoneNominatingMafiaMembers(gameId: String, completion: @escaping (_ mafiaMembers: [MafiaMember]) -> Void) {
         
         
-        self.MafiDoneNominatingListener =  Firestore.firestore().collection("games").document(gameId).collection("mafia_members").whereField("done_nominating", isEqualTo: true).addSnapshotListener { querySnapshot, error in
+        self.MafiDoneNominatingListener =  Firestore.firestore().collection("games").document(gameId).collection("mafia_members").whereField("done_nominating", isEqualTo: true).whereField("is_alive", isEqualTo: true).addSnapshotListener { querySnapshot, error in
             guard let documents = querySnapshot?.documents else {
                 print("No document")
                 return
@@ -541,13 +696,13 @@ final class GameDatabaseManager {
         
         
         self.LML =  Firestore.firestore().collection("games").document(gameId).collection("mafia_members").whereField("is_alive", isEqualTo: true).addSnapshotListener { querySnapshot, error in
-            guard let documents = querySnapshot?.documents else {
+            guard let livingDocuments = querySnapshot?.documents else {
                 print("No document")
                 return
             }
             
             self.MDL =  Firestore.firestore().collection("games").document(gameId).collection("mafia_members").whereField("is_alive", isEqualTo: true).whereField("done_nominating", isEqualTo: true).addSnapshotListener { querySnapshot, error in
-                guard let documents = querySnapshot?.documents else {
+                guard let finnishedDocuments = querySnapshot?.documents else {
                     print("No document")
                     return
                 }
@@ -559,8 +714,8 @@ final class GameDatabaseManager {
                 
                 
                 
-                let livingMafia: [MafiaMember] = documents.compactMap({ try? $0.data(as: MafiaMember.self) })
-                let finnishedMafia: [MafiaMember] = documents.compactMap({ try? $0.data(as: MafiaMember.self) })
+                let livingMafia: [MafiaMember] = livingDocuments.compactMap({ try? $0.data(as: MafiaMember.self) })
+                let finnishedMafia: [MafiaMember] = finnishedDocuments.compactMap({ try? $0.data(as: MafiaMember.self) })
                 
                 let allMafiaAreDone = livingMafia.count == finnishedMafia.count
                 completion(allMafiaAreDone)
@@ -603,6 +758,17 @@ final class GameDatabaseManager {
 
     
     //MARK: Day Functions
+    func voteAgainst(gameId: String, voterId: String, victimId: String) async throws {
+        let data1: [String:Any] = [
+            "voted_for" : victimId
+        ]
+        let data2: [String:Any] = [
+            "vote_count" : FieldValue.increment(Int64(1))
+        ]
+        
+        try await Firestore.firestore().collection("games").document(gameId).collection("players").document(voterId).updateData(data1)
+        try await Firestore.firestore().collection("games").document(gameId).collection("players").document(victimId).updateData(data2)
+    }
     func getRecentlyKilled(gameId: String) async throws -> String {
         let snapshot = try await Firestore.firestore().collection("games").document(gameId).getDocument()
         
