@@ -56,6 +56,17 @@ final class UserDatabaseManager {
         let dateCreated = data["date_created"] as? Date
         let currentGame = data["current_game"] as? String
         
-        return DBUser(userId: userId, name: name!, dateCreated: dateCreated, currentGame: currentGame)
+        return DBUser(userId: userId, name: name ?? "Whoever you are (We don't have your name)", dateCreated: dateCreated, currentGame: currentGame)
+    }
+    
+    func getUserName(userId: String) async throws -> String {
+        let snapshot = try await Firestore.firestore().collection("users").document(userId).getDocument()
+        
+        guard let data = snapshot.data(), let name = data["name"] as? String else {
+            throw URLError(.badServerResponse)
+        }
+    
+        
+        return name
     }
 }

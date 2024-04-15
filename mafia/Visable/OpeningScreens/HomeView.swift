@@ -9,15 +9,20 @@ import SwiftUI
 
 struct HomeView: View {
 
+    @State var name = "..."
     
     var body: some View {
+        
+        
+        
         NavigationView{
             VStack{
-                Text("Welcome")
+                Text("Welcome \n"+name)
                     .font(.largeTitle)
                     .bold()
                     .frame(height: 150)
-                    .padding(20)
+                    .multilineTextAlignment(.center)
+                    .padding(50)
                 Spacer()
                 NavigationLink("Host Game", destination: CreateGameView())
                     .font(.headline)
@@ -36,6 +41,14 @@ struct HomeView: View {
                     .cornerRadius(10)
                     .padding()
                 Spacer()
+            }
+            .onAppear{
+                Task {
+                    let user = try? AuthenticationManager.shared.getAuthenticatedUser()
+                    let userId = user?.uid
+                    self.name = try await UserDatabaseManager.shared.getUserName(userId: userId ?? "no user found")
+                }
+            
             }
             .navigationBarHidden(true)
             .padding()

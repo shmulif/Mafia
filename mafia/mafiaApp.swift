@@ -29,7 +29,9 @@ struct mafiaApp: App {
 
     var body: some Scene {
         WindowGroup {
-            FirstTimeView()
+            NavigationStack{
+              RootView()
+            }
         }
         .modelContainer(sharedModelContainer)
     }

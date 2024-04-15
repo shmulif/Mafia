@@ -12,6 +12,7 @@ import FirebaseFirestore
 struct CreateGameView: View {
     
     @State var showNextView: Bool = false
+    @State var gameId: String = "loading..."
     
     var body: some View {
         VStack {
@@ -19,7 +20,7 @@ struct CreateGameView: View {
                 .font(.largeTitle)
                 .bold()
                 .frame(height: 150)
-            Text("1111")
+            Text(gameId)
                 .font(.largeTitle)
                 .bold()
                 .frame(height: 150)
@@ -28,14 +29,15 @@ struct CreateGameView: View {
                 Task{
                     do {
                         //create game
-                        try await GameDatabaseManager.shared.createNewGame(gameId: "1111")
+                        try await GameDatabaseManager.shared.createNewGame(gameId: gameId)
                         //get current userId
                         let currentUser = try AuthenticationManager.shared.getAuthenticatedUser()
                         let userId = currentUser.uid
                         //add user to game
-                        try await UserDatabaseManager.shared.linkUserToGame(auth: currentUser, gameId: "1111")
+                        try await UserDatabaseManager.shared.linkUserToGame(auth: currentUser, gameId: gameId)
                         let player = try await UserDatabaseManager.shared.getUser(userId: userId)
                         try await GameDatabaseManager.shared.addPlayer(user: player)
+                        try await GameDatabaseManager.shared.setAsHost(user: player)
                         showNextView.toggle()
                     } catch {
                         print(error)
@@ -50,8 +52,13 @@ struct CreateGameView: View {
                     .background(Color.gray)
                     .cornerRadius(10)
             })
+            .onAppear{
+                Task {
+                    self.gameId = try await GameIdManager.shared.getGameId()
+                }
+            }
             .fullScreenCover(isPresented: $showNextView, content:{
-                WaitingForPlayersView(gameId: "1111")
+                WaitingForPlayersView(gameId: gameId)
             })
         
         }
