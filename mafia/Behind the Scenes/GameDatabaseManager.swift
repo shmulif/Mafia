@@ -553,7 +553,14 @@ final class GameDatabaseManager {
         ]
         try await Firestore.firestore().collection("games").document(gameId).updateData(data)
     }
-    
+    func setMafiaAsDoneVoting(gameId: String, userId: String) async {
+        let data: [String:Any] = [
+            "done_nominating" : true,
+        ]
+        
+        try? await Firestore.firestore().collection("games").document(gameId).collection("mafia_members").document(userId).updateData(data)
+
+    }
     func setMafiaAsDone(gameId: String) async throws {
         let data: [String:Bool] = [
             "mafia_are_done" : true
@@ -993,6 +1000,16 @@ final class GameDatabaseManager {
         
         
         //MARK: Day Functions
+    func checkIfAlive(gameId: String, userId: String) async throws -> Bool {
+        let snapshot = try await Firestore.firestore().collection("games").document(gameId).collection("players").document(userId).getDocument()
+        
+        guard let data = snapshot.data(), let isAlive = data["is_alive"] as? Bool else {
+            throw URLError(.badServerResponse)
+        }
+        return isAlive
+
+    }
+    
     func setUpdatedVoteToFalse(gameId: String) async throws {
         let data: [String:Any] = [
             "updated_vote" : false

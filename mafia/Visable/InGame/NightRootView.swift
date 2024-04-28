@@ -11,6 +11,7 @@ struct NightRootView: View {
     
     @Binding var userId: String
     @Binding var gameId: String
+    @State var isAlive: Bool = true
     
     @State private var didAppear: Bool = false
     @State var role: String? = nil
@@ -28,29 +29,32 @@ struct NightRootView: View {
             }
         }
         .onAppear {
-    
-            
-            if role == nil {
-                getRoleAndSetView()
-            } else {
-                setView()
+            Task {
+                //get living status
+                isAlive = try await GameDatabaseManager.shared.checkIfAlive(gameId: gameId, userId: userId)
+                
+                if role == nil {
+                    getRoleAndSetView()
+                } else {
+                    setView()
+                }
             }
     
             
         }
         .fullScreenCover(isPresented: $showMafiaView, content: {
             NavigationStack {
-                MafiaView(userId: $userId, gameId: $gameId)
+                MafiaView(userId: $userId, gameId: $gameId, isAlive: isAlive)
             }
         })
         .fullScreenCover(isPresented: $showDetectiveView, content: {
             NavigationStack {
-                DetectiveView(userId: $userId, gameId: $gameId)
+                DetectiveView(userId: $userId, gameId: $gameId, isAlive: isAlive)
             }
         })
         .fullScreenCover(isPresented: $showDoctorView, content: {
             NavigationStack {
-                DoctorView(userId: $userId, gameId: $gameId)
+                DoctorView(userId: $userId, gameId: $gameId, isAlive: isAlive)
             }
         })
         .fullScreenCover(isPresented: $showCivillianView, content: {
@@ -81,6 +85,6 @@ struct NightRootView: View {
 
 #Preview {
     NavigationStack{
-        NightRootView(userId: .constant("C76F3lyQ4wuuWDvKeDbC"), gameId: .constant("boom"))
+        NightRootView(userId: .constant("4l8al6EUyIMd1FhkBOmMMU4r2iB3"), gameId: .constant("Friends"))
     }
 }

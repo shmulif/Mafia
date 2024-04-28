@@ -12,7 +12,9 @@ struct DayListRowView: View {
     let gameId: String
     let voterId: String
     let player: Player
+    let isAlive: Bool
     @Binding var done: Bool
+    @Binding var showDeadAlert: Bool
     @State var pressed: Bool = false
     
     
@@ -20,7 +22,7 @@ struct DayListRowView: View {
     var body: some View {
         HStack {
             Button(action: {
-                if !pressed && !done {
+                if !pressed && !done && isAlive {
                     Task{
                         do {
                             //Kill
@@ -31,6 +33,8 @@ struct DayListRowView: View {
                             print(error)
                         }
                     }
+                } else if !isAlive {
+                    showDeadAlert.toggle()
                 }
             }, label: {
                 if !pressed {

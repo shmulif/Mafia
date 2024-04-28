@@ -68,9 +68,15 @@ struct WaitingForDayView: View {
             
             
         }
+        .onDisappear {
+            GameDatabaseManager.shared.removeListenerDay()
+            if isHost {
+                GameDatabaseManager.shared.removeListenerEveryoneIsDone()
+            }
+        }
         .fullScreenCover(isPresented: $vm.isDay, content: {
             NavigationStack {
-                DayView(userId: $userId, gameId: $gameId)
+                SunriseView(userId: $userId, gameId: $gameId)
             }
         })
         
@@ -89,5 +95,5 @@ struct WaitingForDayView: View {
 }
 
 #Preview {
-    WaitingForDayView(userId: .constant("Mz6eyySlGOry8avMjqSa"), gameId: .constant("crackle"))
+    WaitingForDayView(userId: .constant("4l8al6EUyIMd1FhkBOmMMU4r2iB3"), gameId: .constant("Friends"))
 }

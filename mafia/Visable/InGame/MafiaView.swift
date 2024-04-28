@@ -59,6 +59,8 @@ struct MafiaView: View {
     
     @Binding var userId: String
     @Binding var gameId: String
+    @State var isAlive: Bool
+    @State var showDeadAlert: Bool = false
     
     @State var selected: String = ""
     @StateObject private var vm = MafiaMembersViewMode()
@@ -98,9 +100,9 @@ struct MafiaView: View {
                 List {
                     ForEach(vm.players, id: \.self) { player in
                         if selected == player.user_id {
-                            VictimListRowView(gameId: gameId, voterId: userId, player: player, pressed: .constant(true), selected: $selected)
+                            VictimListRowView(gameId: gameId, voterId: userId, player: player, pressed: .constant(true), selected: $selected, isAlive: isAlive, showDeadAlert: $showDeadAlert)
                         } else {
-                            VictimListRowView(gameId: gameId, voterId: userId, player: player, pressed: .constant(false), selected: $selected)
+                            VictimListRowView(gameId: gameId, voterId: userId, player: player, pressed: .constant(false), selected: $selected,isAlive: isAlive, showDeadAlert: $showDeadAlert)
                         }
                         
                     }
@@ -127,28 +129,42 @@ struct MafiaView: View {
         }
         .onAppear {
            
-            //check if current user is mafia_host
-            Task {
-                let mafiaHostId = try? await GameDatabaseManager.shared.getMafiaHost(gameId: gameId)
-                isMafiaHost = userId == mafiaHostId
-                //listener for host only
-                if isMafiaHost {
-                    vm.addListenerForMafiaUpdatedVote(gameId: gameId)
-                }
-            }
         
             
             //set up listeners on first appear
             if !didAppear {
+                //check if current user is mafia_host
+                Task {
+                    let mafiaHostId = try? await GameDatabaseManager.shared.getMafiaHost(gameId: gameId)
+                    isMafiaHost = userId == mafiaHostId
+                    //listener for host only
+                    if isMafiaHost {
+                        vm.addListenerForMafiaUpdatedVote(gameId: gameId)
+                    }
+                    if !isAlive {
+                        await GameDatabaseManager.shared.setMafiaAsDoneVoting(gameId: gameId, userId: userId)
+                    }
+                }
+                
 //                Task {
 //                    vm.staticMafiaMembers = try await  GameDatabaseManager.shared.getAllMafiaMembers(gameId: gameId)
 //                }
+                
                 vm.addListenerForPlayers(gameId: gameId)
 //                    vm.addListenerForMafiaVotesMatch(gameId: gameId)
                 vm.addListenerForMafiaAreDone(gameId: gameId)
                 vm.addListenerForMafiaMembers(gameId: gameId)
                 
+                
                 didAppear = true
+            }
+        }
+        .onDisappear {
+            GameDatabaseManager.shared.removeListenerForPlayers()
+            GameDatabaseManager.shared.removeListenerForMafiaAreDone()
+            GameDatabaseManager.shared.removeListenerForMafiaMembers()
+            if isMafiaHost {
+                GameDatabaseManager.shared.removeListenerForMafiaUpdatedVote()
             }
         }
         .fullScreenCover(isPresented: $vm.mafiaAreDone, content: {
@@ -156,7 +172,18 @@ struct MafiaView: View {
                 WaitingForDayView(userId: $userId, gameId: $gameId)
             }
         })
+        
+        ZStack {}
+            .alert(isPresented: $showDeadAlert, content: {
+                displayDeadAlert()
+            })
 
+    }
+    
+    func displayDeadAlert() -> Alert {
+        return Alert(title: Text("Dead players cannot participate"), dismissButton: .default(Text("OK"), action: {
+            showDeadAlert.toggle()
+        }))
     }
     
     //for host
@@ -184,12 +211,14 @@ struct VictimListRowView: View {
     let player: Player
     @Binding var pressed: Bool
     @Binding var selected: String
+    let isAlive: Bool
+    @Binding var showDeadAlert: Bool
     
     
     var body: some View {
         HStack {
             Button(action: {
-                if !pressed {
+                if !pressed && isAlive {
                     Task{
                         do {
                             //Kill
@@ -200,6 +229,8 @@ struct VictimListRowView: View {
                             print(error)
                         }
                     }
+                }  else if !isAlive {
+                    showDeadAlert.toggle()
                 }
             }, label: {
                 if !pressed {
@@ -221,5 +252,5 @@ struct VictimListRowView: View {
 }
 
 #Preview {
-    MafiaView(userId: .constant("FZkml9gdkMmrldqJs8hP"), gameId: .constant("cocoa"), selected: "")
+    MafiaView(userId: .constant("FZkml9gdkMmrldqJs8hP"), gameId: .constant("cocoa"), isAlive: true, selected: "")
 }

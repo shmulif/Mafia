@@ -132,6 +132,9 @@ struct WaitingForPlayersView: View {
             }
             
         }
+        .onDisappear {
+            GameDatabaseManager.shared.removeListenerForPlayers()
+        }
         .fullScreenCover(isPresented: $showNextView, content:{
             NightRootView(userId: $userId, gameId: $gameId)
         })

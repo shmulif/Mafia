@@ -111,6 +111,7 @@ final class LocalGamePlayManager {
     
     //moderator
     func checkIfDoneVoting1(players: [Player]) -> Bool {
+        print("checking if done voting:")
         var doneVoting = true
         for player in players {
             print(player.name)
@@ -157,7 +158,7 @@ final class LocalGamePlayManager {
     }
     
     func killIfNeededAndCalculateWinnersDay(gameId: String, players: [Player]) async throws {
-        print("starting function")
+        print("starting end of day function")
         let personToKill = self.calculateVotes(players: players)
         //print(personToKill)
         if personToKill == nil {

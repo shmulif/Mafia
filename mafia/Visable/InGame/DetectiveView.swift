@@ -18,6 +18,8 @@ struct DetectiveView: View {
     
     @Binding var userId: String
     @Binding var gameId: String
+    @State var isAlive: Bool
+
     @StateObject private var vm = DetectiveViewModel()
     
     @State var showNextView: Bool = false
@@ -58,9 +60,9 @@ struct DetectiveView: View {
             if done {
                 Button(action: {
                     Task {
-                        showNextView = true
                         try? await GameDatabaseManager.shared.setDetectiveAsDone(gameId: gameId)
                     }
+                    showNextView = true
                     
                 }, label: {
                     Text("Continue")
@@ -76,6 +78,10 @@ struct DetectiveView: View {
         }
         .onAppear {
             Task {
+                if !isAlive {
+                    try await GameDatabaseManager.shared.setDetectiveAsDone(gameId: gameId)
+                    showNextScreen = true
+                }
                 vm.players = try await  GameDatabaseManager.shared.getLivingPlayers(gameId: gameId)
             }
         }
@@ -86,5 +92,5 @@ struct DetectiveView: View {
 }
 
 #Preview {
-    DetectiveView(userId: .constant("qImj506kDGSW8JhcLAkHJevtmKD3"), gameId: .constant("1234"))
+    DetectiveView(userId: .constant("qImj506kDGSW8JhcLAkHJevtmKD3"), gameId: .constant("1234"), isAlive: true)
 }

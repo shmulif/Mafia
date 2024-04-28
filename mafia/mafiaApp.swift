@@ -30,7 +30,8 @@ struct mafiaApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack{
-              RootView()
+                RootView()
+//                DayView(userId: .constant("4l8al6EUyIMd1FhkBOmMMU4r2iB3"), gameId: .constant("party"))
             }
         }
         .modelContainer(sharedModelContainer)

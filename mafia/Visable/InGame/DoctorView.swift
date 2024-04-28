@@ -20,6 +20,8 @@ struct DoctorView: View {
     @Binding var gameId: String
     @StateObject private var vm = DoctorViewModel()
     @State var selected: String = ""
+    @State var isAlive: Bool
+
     @State var showNextScreen: Bool = false
     
     var body: some View {
@@ -49,6 +51,10 @@ struct DoctorView: View {
         }
         .onAppear {
             Task {
+                if !isAlive {
+                    try await GameDatabaseManager.shared.setDoctorAsDone(gameId: gameId)
+                    showNextScreen = true
+                }
                 vm.players = try await  GameDatabaseManager.shared.getLivingPlayers(gameId: gameId)
             }
         }
@@ -61,5 +67,5 @@ struct DoctorView: View {
 }
 
 #Preview {
-    DoctorView(userId: .constant("qImj506kDGSW8JhcLAkHJevtmKD3"), gameId: .constant("1234"))
+    DoctorView(userId: .constant("qImj506kDGSW8JhcLAkHJevtmKD3"), gameId: .constant("1234"), isAlive: true)
 }
