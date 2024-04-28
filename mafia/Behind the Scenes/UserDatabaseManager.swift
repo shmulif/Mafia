@@ -59,6 +59,29 @@ final class UserDatabaseManager {
         return DBUser(userId: userId, name: name ?? "Whoever you are (We don't have your name)", dateCreated: dateCreated, currentGame: currentGame)
     }
     
+    func randomAlphanumericString(_ length: Int) -> String {
+       let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+       let len = UInt32(letters.count)
+       var random = SystemRandomNumberGenerator()
+       var randomString = ""
+       for _ in 0..<length {
+          let randomIndex = Int(random.next(upperBound: len))
+          let randomCharacter = letters[letters.index(letters.startIndex, offsetBy: randomIndex)]
+          randomString.append(randomCharacter)
+       }
+       return randomString
+    }
+    
+    func makeFakeUser(gameId: String, name: String) async throws -> DBUser {
+        
+        
+        let userId = randomAlphanumericString(20)
+        let dateCreated = Date.now
+        let currentGame = gameId
+        
+        return DBUser(userId: userId, name: name, dateCreated: dateCreated, currentGame: currentGame)
+    }
+    
     func getUserName(userId: String) async throws -> String {
         let snapshot = try await Firestore.firestore().collection("users").document(userId).getDocument()
         

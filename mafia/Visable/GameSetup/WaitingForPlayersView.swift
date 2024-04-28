@@ -12,12 +12,8 @@ final class PlayerCheckingViewModel: ObservableObject {
     
     @Published var players: [Player] = []
     
-    
-    let userId: String? = "qImj506kDGSW8JhcLAkHJevtmKD3"
-    let gameId: String = "1234"
-    
 
-    func addListenerForPlayers() {
+    func addListenerForPlayers(gameId: String) {
         GameDatabaseManager.shared.addListenerForPlayers(gameId: gameId) { [weak self] players in
             self?.players = players
         }
@@ -27,11 +23,14 @@ final class PlayerCheckingViewModel: ObservableObject {
 
 struct WaitingForPlayersView: View {
     
+    
+    @Binding var gameId: String
+    
     @StateObject private var viewModel = PlayerCheckingViewModel()
-    @State var gameId: String
     @State private var didAppear: Bool = false
     @State var showNextView: Bool = false
     @State var isHost: Bool = false
+    @State var userId: String = ""
     
     var body: some View {
         VStack{
@@ -43,7 +42,7 @@ struct WaitingForPlayersView: View {
             Button(action: {
                 Task {
                     do {
-                        try await viewModel.players = GameDatabaseManager.shared.getAllPlayers(gameId: viewModel.gameId)
+                        try await viewModel.players = GameDatabaseManager.shared.getAllPlayers(gameId: gameId)
                     } catch {
                         print(error)
                     }
@@ -69,7 +68,11 @@ struct WaitingForPlayersView: View {
                                     //asign roles
                                     viewModel.players = LocalGamePlayManager.shared.assignRoles(players: viewModel.players)
                                     //update database
-                                    try await GameDatabaseManager.shared.updateAllPlayerRoles(gameId: viewModel.gameId, players: viewModel.players)
+                                    try await GameDatabaseManager.shared.updateAllPlayerRoles(gameId: gameId, players: viewModel.players)
+                                    //add mafia members
+                                    await LocalGamePlayManager.shared.addMafiMembers(gameId: gameId, players: viewModel.players)
+                                    //set mafia host
+                                    
                                     showNextView.toggle()
                                 } catch {
                                     print(error)
@@ -113,21 +116,28 @@ struct WaitingForPlayersView: View {
         }
         .onAppear {
                 if !didAppear {
-                    viewModel.addListenerForPlayers()
+                    viewModel.addListenerForPlayers(gameId: gameId)
                     didAppear = true
             }
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            if authUser?.uid != nil {
+                userId = authUser!.uid
+            } else {
+                print("error: no user id found")
+            }
+            
             Task {
-                let hostId = try? await GameDatabaseManager.shared.getHostId(gameId: viewModel.gameId)
-                isHost = viewModel.userId == hostId
+                let hostId = try? await GameDatabaseManager.shared.getHostId(gameId: gameId)
+                isHost = userId == hostId ?? "<no host id>"
             }
             
         }
         .fullScreenCover(isPresented: $showNextView, content:{
-            GameRootView()
+            NightRootView(userId: $userId, gameId: $gameId)
         })
     }
 }
 
 #Preview {
-    WaitingForPlayersView(gameId: "1111")
+    WaitingForPlayersView(gameId: .constant("boom"))
 }

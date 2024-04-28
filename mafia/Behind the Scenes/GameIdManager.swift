@@ -49,4 +49,10 @@ final class GameIdManager {
         return gameId[0]
     }
     
+    func makeGameIdAvailable(gameId: String) async {
+        let data: [String:Any] = [
+            "in_use" : false
+        ]
+        try? await Firestore.firestore().collection("game_ids").document(gameId).updateData(data)
+    }
 }

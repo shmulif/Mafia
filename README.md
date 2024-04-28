@@ -25,11 +25,12 @@ The files are now on your computer, however, for the app to run you must incorpo
 You will need to set up a Firebase account and incorporate it into your project, This video provides a detailed guide https://www.youtube.com/watch?v=sHWX5j6wUjA You can skip the last step in the video of adding the configuration code (at 16:50) because the code is already added to the project.
 (Check out the rest of that channel for help with iOS development in general including more help with using Firebase in Swift.)
 
-Once your Firebase account is set up you must enable Firestore database. Select it from the left panel of your Firbase console, and click 'Create database'. The next section details how to mange security for Firestore. 
+**Enable Authentication and Firestore:**
+Once your Firebase account is set up you must enable Firestore and Authentication. They can both be found in the left panel of your Firbase console. Under Firestore click 'Create database' to enable it. Under 'Authentication' click 'get started', select 'Anonymous', and  click 'enable'.
 
 **Firestore Security:**
 
-If your contributions to this project will be open source, it is best not to share the file called "GoogleService-Info.plist" (this file was downloaded during the setup of Firebase). This is the easiest way to ensure that no unwanted users can access your database. In order to exclude the file from your git repo, navigate to the project folder and run the command "git -ignore GoogleService-Info.plist".
+If your contributions to this project will be open source, it is best not to share the file called "GoogleService-Info.plist" (this file was downloaded during the setup of Firebase). This is the easiest way to ensure that no unwanted users can access your database. The repo already has a gitignore which will exclude the file.
 
 If you plan on publishing the app then the information in that file will be publicly available, so you will need to set up more advanced security measures. This video is a good guide for setting up security rules https://www.youtube.com/watch?v=ysvmtLCYou0 Documentation on Firetore security rules can be found here https://firebase.google.com/docs/rules  Additionally, it is recommended to set up a Firebase service called "App check". This is a paid service that ensures that your database can only be accessed from users of your app. Its documentation can be found here https://firebase.google.com/docs/app-check
 
@@ -39,5 +40,4 @@ If you plan on publishing the app then the information in that file will be publ
 3) Add an overview of the rules.
 4) Create variations of the game that fit in different genres or time-periods. For example, there can be a werewolf variation or a world war II spy variation.
 
-If you have a suggested addition I would love to hear it.
-
+If you have a suggested addition I would love to hear about it! Please post it under issues and label it 'enhancement'.

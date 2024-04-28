@@ -58,7 +58,7 @@ struct CreateGameView: View {
                 }
             }
             .fullScreenCover(isPresented: $showNextView, content:{
-                WaitingForPlayersView(gameId: gameId)
+                WaitingForPlayersView(gameId: $gameId)
             })
         
         }

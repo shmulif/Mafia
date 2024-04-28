@@ -63,7 +63,7 @@ struct JoinGameView: View {
                     .cornerRadius(10)
             })
             .fullScreenCover(isPresented: $showNextView, content:{
-                WaitingForPlayersView(gameId: viewModel.gameId)
+                WaitingForPlayersView(gameId: $viewModel.gameId)
             })
             Spacer()
             .padding()

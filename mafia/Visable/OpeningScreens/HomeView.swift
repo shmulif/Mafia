@@ -41,7 +41,11 @@ struct HomeView: View {
                     .cornerRadius(10)
                     .padding()
                 Spacer()
-            }
+                Button(action: {
+                    try? AuthenticationManager.shared.signOut()
+                }, label: {
+                    Text("Sign out").frame(width: 100, height: 50, alignment: .center).background(.gray).foregroundColor(.black).cornerRadius(50)
+                })            }
             .onAppear{
                 Task {
                     let user = try? AuthenticationManager.shared.getAuthenticatedUser()

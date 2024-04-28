@@ -15,22 +15,21 @@ struct RootView: View {
     @State private var showFirstTimeView: Bool = false
     @State var userId: String? = ""
     var body: some View {
-        ZStack {
-            NavigationStack {
+        NavigationStack {
+            ZStack {
                 HomeView()
             }
-        }
-        .onAppear {
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            userId = authUser?.uid
-            self.showFirstTimeView = authUser == nil
-        }
-        .fullScreenCover(isPresented: $showFirstTimeView, content: {
-            NavigationStack {
-                FirstTimeView()
+            .onAppear {
+                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                userId = authUser?.uid
+                self.showFirstTimeView = authUser == nil
             }
-        })
-    
+            .fullScreenCover(isPresented: $showFirstTimeView, content: {
+                NavigationStack {
+                    FirstTimeView()
+                }
+            })
+        }
     }
 }
 
